@@ -321,6 +321,10 @@ function update(dt) {
     foamT = 0.035;
     for (const sd of [-1, 1]) foam.push({ x: boat.x - Math.cos(boat.a) * 3 * U, y: boat.y - Math.sin(boat.a) * 3 * U, vx: -Math.sin(boat.a) * sd * 5 * U + rnd(-1, 1) * U, vy: Math.cos(boat.a) * sd * 5 * U + rnd(-1, 1) * U, life: 0.8, max: 0.8, s: 0.6 * U });
   }
+  if (boat.dashT > 0) for (let i = 0; i < 2; i++) { // speed streaks
+    const sd = rnd(-1, 1);
+    foam.push({ x: boat.x - Math.cos(boat.a) * 2 * U - Math.sin(boat.a) * sd * 2 * U, y: boat.y - Math.sin(boat.a) * 2 * U + Math.cos(boat.a) * sd * 2 * U, vx: -Math.cos(boat.a) * 14 * U, vy: -Math.sin(boat.a) * 14 * U, life: 0.5, max: 0.5, s: 0.5 * U });
+  }
   { const k = 1 - Math.exp(-8 * dt); cam.x += (boat.x - W / 2 - cam.x) * k; cam.y += (boat.y - H / 2 - cam.y) * k; }
   loadChunks();
   hmines = hmines.filter(m => !m.dead && (m.life -= dt) > 0);
@@ -468,7 +472,9 @@ function update(dt) {
     } else if (bd > Math.hypot(W, H) * 1.1) { // keep the boss in the fight
       const a = rnd(0, TAU), dd = Math.hypot(W, H) / 2 + 10 * U; e.x = boat.x + Math.cos(a) * dd; e.y = boat.y + Math.sin(a) * dd;
     }
-    if (e.type !== 'mine' && e.type !== 'octopus') pushTrail(e, dt, 14);
+    if (e.type !== 'mine' && e.type !== 'octopus') {
+      pushTrail(e, dt, 14);
+    }
     if (!e.boss && (e.age > e.life || bd > Math.hypot(W, H) * 1.3)) { e.dead = true; if (bd < Math.hypot(W, H)) splash(e.x, e.y); continue; }
     if (!e.boss) for (const r of rocks) if (Math.hypot(e.x - r.x, e.y - r.y) < r.r + e.r * 0.6) { killEnemy(e, 'rock'); break; }
     if (e.dead) continue;
