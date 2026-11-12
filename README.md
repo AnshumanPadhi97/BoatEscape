@@ -6,8 +6,8 @@ Paddle your boat across an endless sea. Enemies chase you, mines and ice lie in 
 
 - **Endless sea** with islands, ice, plastic, mines and coins.
 - **7 enemy types** and **2 bosses**.
-- **6 power-ups**: shield, speed, magnet, slow-mo, bomb and mines.
-- **Dash** and a **mine-dropping weapon**.
+- **5 power-ups**: shield, speed, magnet, slow-mo and bomb.
+- **Dash** to dodge danger.
 - **3 boats** and **4 upgrades** in the shop.
 - **Hazards**: islands, floating mines, slippery ice, floating plastic, a big wave, storms with lightning, fog.
 - **Sea life**: tourist boats, fishing boats, cruise ships, anchored boats, water skiers and schools of fish.
@@ -29,7 +29,6 @@ The trick is to make enemies wreck themselves: lead them into islands, mines, bo
 |---|---|---|
 | Steer | Hold and drag: the boat turns toward your finger | `←` `→` or `A` `D` |
 | Dash | DASH button (bottom right) | `Space` or `Shift` |
-| Drop a mine | Round fire button (appears when you have mines) | `F` or `X` |
 | Pause / resume | Pause button (top right) | `P` or `Esc` |
 | Start / retry | PLAY and Retry buttons | `Enter` or `Space` on a menu |
 
@@ -99,7 +98,6 @@ Difficulty comes in **surges**. Nothing ever gets faster: your boat and the enem
 
 - **Dash**: a short burst of speed (about 0.35 seconds) that makes you untouchable by enemies, shells and mines. It recharges in 3 seconds (the ring around the button shows progress).
 - **Shield**: absorbs one hit, then gives about 0.8 seconds of grace.
-- **Mines**: drop one behind you with the fire button. They never hurt you, they blast enemies, and each lasts 40 seconds.
 
 ## Power-ups
 
@@ -112,7 +110,6 @@ Glowing rings that appear near you and fade after about 14 seconds.
 | **Magnet** | 🧲 | Pulls coins and power-ups from three times as far for 10 seconds. |
 | **Slow-mo** | ⏱ | Enemies, shells and warnings run at half speed for 6 seconds. |
 | **Bomb** | 💣 | Instantly destroys everything within range (damages a boss). |
-| **Mines** | ⚓ | Gives you 3 mines to drop. |
 
 ## Coins and the shop
 

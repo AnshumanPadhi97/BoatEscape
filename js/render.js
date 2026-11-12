@@ -466,7 +466,6 @@ function draw() {
     for (const o of plasticsL) if (onScreen(o.x, o.y, 3 * U)) drawPlastic(o, tm);
     for (const m of smines) if (!m.dead && onScreen(m.x, m.y, 5 * U)) drawMine(m, tm, '#c93a2e');
     for (const m of hmines) if (!m.dead && onScreen(m.x, m.y, 5 * U)) drawMine(m, tm, '#e6a020');
-    for (const m of pmines) if (!m.dead && onScreen(m.x, m.y, 5 * U)) drawMine(m, tm, '#4fd16a');
     for (const k of coinsL) if (!k.dead && onScreen(k.x, k.y, 3 * U)) drawCoin(k, tm);
     for (const k of dcoins) if (onScreen(k.x, k.y, 3 * U)) drawCoin(k, tm);
     for (const k of chestsL) if (!k.dead && onScreen(k.x, k.y, 5 * U)) drawChest(k, tm);

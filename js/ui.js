@@ -19,7 +19,7 @@ const VIEWS = {
         <button class="btn alt" data-act="settings">Settings</button>
       </div>
       <button class="btn alt" data-act="readme">How to play (README)</button>
-      <p class="tip">${TOUCH ? 'Hold &amp; drag to steer · tap DASH to dash · tap the round fire button to drop mines' : 'Hold &amp; drag (or ← → / A D) to steer · Space = dash · F = fire · P = pause'}<br>Lure enemies into rocks, mines and each other. Mines blast everything nearby.</p>`;
+      <p class="tip">${TOUCH ? 'Hold &amp; drag to steer · tap DASH to dash' : 'Hold &amp; drag (or ← → / A D) to steer · Space = dash · P = pause'}<br>Lure enemies into rocks, mines and each other. Mines blast everything nearby.</p>`;
   },
   pause() {
     return `<h2>PAUSED</h2>

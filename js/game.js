@@ -2,7 +2,7 @@
 let state = 'menu'; // menu | play | pause | over
 let overShown = false, lastRun = null;
 let boat = { x: 0, y: 0, a: 0, shield: 0, trail: [], inv: 0, dashT: 0, dashCd: 0, weapon: null, ammo: 0 };
-let schools = [], solids = [], tourists = [], enemies = [], shells = [], missiles = [], zones = [], hmines = [], pmines = [], allMines = [];
+let schools = [], solids = [], tourists = [], enemies = [], shells = [], missiles = [], zones = [], hmines = [], allMines = [];
 let powerups = [], dcoins = [], particles = [], rings = [], foam = [], floaters = [];
 let cam = { x: 0, y: 0 };
 let t = 0, pts = 0, score = 0, kills = 0, combo = 0, comboT = 0, mult = 1, runCoins = 0;
@@ -29,10 +29,9 @@ const PU = {
   magnet:  { col: '#ff7a7a', icon: '🧲', w: 1.5 },
   slow:    { col: '#c9a0ff', icon: '⏱', w: 1.5 },
   bomb:    { col: '#ffb347', icon: '💣', w: 1.2 },
-  minelay: { col: '#9fb0ba', icon: '⚓', w: 1.5 },
 };
-const PU_NAME = { shield: 'SHIELD', speed: 'SPEED', magnet: 'MAGNET', slow: 'SLOW-MO', bomb: 'BOMB', minelay: 'MINES' };
-const DMG = { missile: 3, mine: 2, pmine: 2, bomb: 4 };
+const PU_NAME = { shield: 'SHIELD', speed: 'SPEED', magnet: 'MAGNET', slow: 'SLOW-MO', bomb: 'BOMB' };
+const DMG = { missile: 3, mine: 2, bomb: 4 };
 
 function skierPos(o) {
   const side = Math.sin(worldT * 1.7 + o.ph) * 2.6 * U, back = 9 * U;
@@ -58,7 +57,7 @@ function start() {
   CS = 80 * U; chunks = new Map(); destroyed = new Set(); worldT = 0;
   boat = { x: 0, y: 0, a: -Math.PI / 2, shield: 0, trail: [], inv: 0, dashT: 0, dashCd: 0, weapon: null, ammo: 0, vx: undefined, vy: 0, onIce: false };
   cam.x = -W / 2; cam.y = -H / 2;
-  tourists = []; schools = []; solids = []; enemies = []; shells = []; missiles = []; zones = []; hmines = []; pmines = []; allMines = [];
+  tourists = []; schools = []; solids = []; enemies = []; shells = []; missiles = []; zones = []; hmines = []; allMines = [];
   powerups = []; dcoins = []; particles = []; rings = []; foam = []; floaters = [];
   t = 0; pts = 0; score = 0; kills = 0; combo = 0; comboT = 0; mult = 1; runCoins = 0;
   spawnT = 1.5; powerT = 8; bossT = 100; bossCount = 0; boss = null; shake = 0; overT = 0; secT = 1;
@@ -95,7 +94,7 @@ function killEnemy(e, how, base = 5) {
   e.dead = true;
   if (how === 'whirl') splash(e.x, e.y); else explode(e.x, e.y, false, how === 'shield' ? '#7fd8ff' : (how === 'bolt' ? '#fff6a8' : null));
   award(base, e.x, e.y); evt('kill');
-  if (how === 'mine' || how === 'pmine') evt('minekill');
+  if (how === 'mine') evt('minekill');
   if (how === 'missile') evt('missile');
   if (how === 'whirl') evt('whirl');
 }
@@ -124,10 +123,10 @@ function detonate(m) {
   if (m.dead) return;
   m.dead = true; if (m.id) destroyed.add(m.id);
   explode(m.x, m.y, true); Sound.sfx('explode');
-  const R = (m.friendly ? 9 : 11) * U, how = m.friendly ? 'pmine' : 'mine';
+  const R = 11 * U, how = 'mine';
   for (const e of enemies) if (!e.dead && Math.hypot(e.x - m.x, e.y - m.y) < R + (e.boss ? e.r : 0)) killEnemy(e, how);
   for (const o of allMines) if (!o.dead && Math.hypot(o.x - m.x, o.y - m.y) < R) detonate(o);
-  if (!m.friendly && state === 'play' && Math.hypot(boat.x - m.x, boat.y - m.y) < 6.5 * U) hitBoat();
+  if (state === 'play' && Math.hypot(boat.x - m.x, boat.y - m.y) < 6.5 * U) hitBoat();
 }
 
 // ---------- enemies ----------
@@ -165,9 +164,6 @@ function fire() {
   if (boat.weapon === 'missile') {
     missiles.push({ x: boat.x + Math.cos(boat.a) * 3 * U, y: boat.y + Math.sin(boat.a) * 3 * U, a: boat.a, life: 3.5, sp: 60 * U, trail: [], tt: 0 });
     Sound.sfx('shoot');
-  } else {
-    pmines.push({ x: boat.x - Math.cos(boat.a) * 5 * U, y: boat.y - Math.sin(boat.a) * 5 * U, age: 0, ph: rnd(0, TAU), life: 40, friendly: true, dead: false });
-    Sound.sfx('splash');
   }
   boat.ammo--; if (boat.ammo <= 0) boat.weapon = null;
 }
@@ -327,9 +323,9 @@ function update(dt) {
   }
   { const k = 1 - Math.exp(-8 * dt); cam.x += (boat.x - W / 2 - cam.x) * k; cam.y += (boat.y - H / 2 - cam.y) * k; }
   loadChunks();
-  hmines = hmines.filter(m => !m.dead && (m.life -= dt) > 0); pmines = pmines.filter(m => !m.dead && (m.life -= dt) > 0);
-  for (const m of hmines) m.age += dt; for (const m of pmines) m.age += dt;
-  allMines = smines.concat(hmines, pmines);
+  hmines = hmines.filter(m => !m.dead && (m.life -= dt) > 0);
+  for (const m of hmines) m.age += dt;
+  allMines = smines.concat(hmines);
 
   updateWeather(dt, edt);
   updateTide(dt);
@@ -337,7 +333,7 @@ function update(dt) {
 
   // boat vs rocks / mines
   for (const r of rocks) if (Math.hypot(boat.x - r.x, boat.y - r.y) < r.r + 1.6 * U) return die();
-  if (boat.inv <= 0) for (const m of allMines) if (!m.dead && !m.friendly && Math.hypot(boat.x - m.x, boat.y - m.y) < 3.6 * U) { detonate(m); if (state !== 'play') return; }
+  if (boat.inv <= 0) for (const m of allMines) if (!m.dead && Math.hypot(boat.x - m.x, boat.y - m.y) < 3.6 * U) { detonate(m); if (state !== 'play') return; }
 
   // spawning
   spawnT -= dt;
